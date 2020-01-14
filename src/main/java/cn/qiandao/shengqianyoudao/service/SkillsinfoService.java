@@ -2,6 +2,7 @@ package cn.qiandao.shengqianyoudao.service;
 
 import cn.qiandao.shengqianyoudao.pojo.Skillsinfo;
 import cn.qiandao.shengqianyoudao.pojo.Skilluserrelationship;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -81,5 +82,7 @@ public interface SkillsinfoService {
      * @return
      */
     List<Skillsinfo> getByUserId(String userId);
+
+    PageInfo<Skillsinfo> getAllSkills(int state, int pageNum, int pageSize);
 
 }

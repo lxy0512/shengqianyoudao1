@@ -63,7 +63,7 @@ public class User implements Serializable {
     private String role;
 
     //权限
-    private ArrayList<String> permissions;
+    private String permissions;
 
     //名字
     private String name;

@@ -5,11 +5,14 @@ import cn.qiandao.shengqianyoudao.mapper.SkillsinfoMapper;
 import cn.qiandao.shengqianyoudao.pojo.Skillsinfo;
 import cn.qiandao.shengqianyoudao.pojo.Skilltype;
 import cn.qiandao.shengqianyoudao.pojo.Skilluserrelationship;
+import cn.qiandao.shengqianyoudao.pojo.Taskinfo;
 import cn.qiandao.shengqianyoudao.service.SkillorderService;
 import cn.qiandao.shengqianyoudao.service.SkillsinfoService;
 import cn.qiandao.shengqianyoudao.service.SkilltypeService;
 import cn.qiandao.shengqianyoudao.service.UserService;
 import cn.qiandao.shengqianyoudao.util.IDUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,5 +176,18 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
             list.add(skillsinfo);
         }
         return list;
+    }
+
+    @Override
+    public PageInfo<Skillsinfo> getAllSkills(int state, int pageNum, int pageSize) {
+        //设置分页器
+        PageHelper.startPage(pageNum,pageSize);
+
+        Skillsinfo skillsinfo = new Skillsinfo();
+        skillsinfo.setSiState(state);
+        List<Skillsinfo> select = skillsinfoMapper.select(skillsinfo);
+
+        PageInfo<Skillsinfo> page = new PageInfo<>(select);
+        return page;
     }
 }

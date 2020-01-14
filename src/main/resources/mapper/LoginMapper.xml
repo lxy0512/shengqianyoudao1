@@ -9,10 +9,12 @@
         <!--@Table userinfo-->
         <result column="ui_number" jdbcType="VARCHAR" property="number" />
         <result column="ui_name" jdbcType="VARCHAR" property="username" />
+        <result column="ui_pwd" jdbcType="VARCHAR" property="pwd" />
         <result column="ui_img" jdbcType="VARCHAR" property="img" />
         <result column="ui_bgimg" jdbcType="VARCHAR" property="bgimg" />
         <result column="ui_phone" jdbcType="VARCHAR" property="phone" />
         <result column="ui_grade" jdbcType="INTEGER" property="grade" />
+        <result column="ui_state" jdbcType="INTEGER" property="state" />
         <result column="ui_code" jdbcType="VARCHAR" property="invitationcode" />
         <result column="ui_signature" jdbcType="VARCHAR" property="signature" />
         <result column="ui_registrationdate" jdbcType="DATE" property="registrationdate" />
@@ -34,6 +36,9 @@
         <result column="ubi_incomerange" jdbcType="INTEGER" property="incomerange" />
         <result column="ubi_email" jdbcType="VARCHAR" property="email" />
         <result column="ubi_wechat" jdbcType="VARCHAR" property="wechat" />
+        <result column="ro_name" jdbcType="VARCHAR" property="role"/>
+        <result column="rp_permissionnumber" jdbcType="VARCHAR" property="permissions"/>
+        <result column="ui_creditscore" jdbcType="INTEGER" property="creditscore"/>
     </resultMap>
 
     <select id="getPasswordByUsername" resultType="java.lang.String">
@@ -96,9 +101,12 @@
         )
     </insert>
     <select id="getUserInfo" resultType="cn.qiandao.shengqianyoudao.pojo.User" resultMap="LoginMap">
-        select ui_number,ui_name,ui_img,ui_bgimg,ui_phone,ui_grade,ui_code,ui_signature,ui_registrationdate,ui_cashbalance,
-        ui_virtualcurrencybalance,ubi_name,ubi_familyname,ubi_language,ubi_gender,ubi_birth,ubi_area,ubi_documenttype,ubi_documentnumber,ubi_educationbackground,
-        ubi_educationexperience,ubi_industry,ubi_workingexperience,ubi_incomerange,ubi_email,ubi_wechat from userinfo,userbasicinfo where ui_phone=#{getPhone} and ui_number=ubi_usernumber
+        select ui_number,ui_name,ui_pwd,ui_img,ui_bgimg,ui_phone,ui_grade,ui_state,ui_code,ui_signature,ui_registrationdate,ui_cashbalance,
+        ui_virtualcurrencybalance,ubi_name,ubi_familyname,ubi_language,ubi_gender,ubi_birth,ubi_area,ubi_documenttype,
+        ubi_documentnumber,ubi_educationbackground,ubi_educationexperience,ubi_industry,ubi_workingexperience,ubi_incomerange,ubi_email,
+        ubi_wechat,ro_name,rp_permissionnumber,ui_creditscore
+        from userinfo,userbasicinfo,userrole,role,rolepermission
+        where ui_phone=#{getPhone} and ui_number=ubi_usernumber and ubi_usernumber=ur_usernumber and ur_rolenumber=ro_number and rp_rolenumber=ro_number and ui_state=1
     </select>
     <select id="getNumber" resultType="java.lang.String">
         select ui_number from userinfo order by ui_id desc limit 0,1
@@ -106,12 +114,6 @@
     <insert id="saveUserRole">
         insert into userrole values (0,#{userNumber},"js01")
     </insert>
-    <select id="getpermissions" resultType="java.lang.String">
-        select rp_permissionnumber from rolepermission where rp_rolenumber=#{role}
-    </select>
-    <select id="getrole" resultType="java.lang.String">
-        select ur_rolenumber from userrole where ur_usernumber=#{number}
-    </select>
     <update id="changPwd">
         update userinfo set ui_pwd = #{pwd} where ui_phone = #{phone}
     </update>

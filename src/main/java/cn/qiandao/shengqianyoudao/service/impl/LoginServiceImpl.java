@@ -181,9 +181,6 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public User getUserInfo(String phone) {
         User u = lm.getUserInfo(phone);
-        u.setRole(lm.getrole(u.getNumber()));
-        u.setPermissions(lm.getpermissions(u.getRole()));
-        //u.setCreditscore(lm.getCreditScore(u.getNumber()));
         return u;
     }
 

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.qiandao.shengqianyoudao.mapper.UserInfoMapper">
+
+    <resultMap id="attMap" type="cn.qiandao.shengqianyoudao.pojo.Breviary">
+        <result column="ui_number" jdbcType="VARCHAR" property="number"/>
+        <result column="ui_name" jdbcType="VARCHAR" property="username"/>
+        <result column="ui_img" jdbcType="VARCHAR" property="images"/>
+        <result column="ui_code" jdbcType="VARCHAR" property="code"/>
+    </resultMap>
+    <update id="changeUserInfo">
+        update userinfo set
+        <trim suffix=",">
+            <if test="user.username !=  null">
+                ui_name = #{user.username}
+            </if>
+            <if test="user.img !=  null">
+                ui_img = #{user.img}
+            </if>
+            <if test="user.bgimg !=  null">
+                ui_bgimg = #{user.bgimg}
+            </if>
+            <if test="user.signature !=  null">
+                ui_signature = #{user.signature}
+            </if>
+        </trim>
+        where ui_number = #{user.number}
+    </update>
+    <update id="changeUserBasicInfo">
+        update userbasicinfo set
+        <trim suffix=",">
+            <if test="user.name !=  null">
+                ubi_name = #{user.name}
+            </if>
+            <if test="user.familyname !=  null">
+                ubi_familyname = #{user.familyname}
+            </if>
+            <if test="user.language !=  null">
+                ubi_language = #{user.language}
+            </if>
+            <if test="user.gender !=  null">
+                ubi_gender = #{user.gender}
+            </if>
+            <if test="user.birth !=  null">
+                ubi_birth = #{user.birth}
+            </if>
+            <if test="user.area !=  null">
+                ubi_area = #{user.area}
+            </if>
+            <if test="user.documenttype !=  null">
+                ubi_documenttype = #{user.documenttype}
+            </if>
+            <if test="user.documentnumber !=  null">
+                ubi_documentnumber = #{user.documentnumber}
+            </if>
+            <if test="user.educationbackground !=  null">
+                ubi_educationbackground = #{user.educationbackground}
+            </if>
+            <if test="user.educationexperience !=  null">
+                ubi_educationexperience = #{user.educationexperience}
+            </if>
+            <if test="user.industry !=  null">
+                ubi_industry = #{user.industry}
+            </if>
+            <if test="user.workingexperience !=  null">
+                ubi_workingexperience = #{user.workingexperience}
+            </if>
+            <if test="user.incomerange !=  null">
+                ubi_incomerange = #{user.incomerange}
+            </if>
+            <if test="user.email !=  null">
+                ubi_email = #{user.email}
+            </if>
+            <if test="user.wechat !=  null">
+                ubi_wechat = #{user.wechat}
+            </if>
+        </trim>
+        where ubi_usernumber = #{user.number}
+    </update>
+    <select id="aaa" resultType="int">
+        select count(1) from attention where ((#{fields1}=#{usernumber}) or (#{fields2}=#{usernumber} and at_state=#{code})) and not ui_number=#{usernumber}
+    </select>
+    <select id="attention1" resultType="cn.qiandao.shengqianyoudao.pojo.Breviary" resultMap="attMap">
+        select ui_number,ui_name,ui_img from attention,userinfo where ((ui_number=at_twousernumber) or(ui_number=at_oneusernumber)) and ((at_oneusernumber=#{usernumber1}) or (at_twousernumber=#{usernumber1} and at_state=2)) and not ui_number=#{usernumber1}
+    </select>
+    <select id="attention2" resultType="cn.qiandao.shengqianyoudao.pojo.Breviary" resultMap="attMap">
+        select ui_number,ui_name,ui_img from attention,userinfo where ((ui_number=at_twousernumber) or(ui_number=at_oneusernumber)) and ((at_twousernumber=#{usernumber2}) or (at_oneusernumber=#{usernumber2} and at_state=2)) and not ui_number=#{usernumber2}
+    </select>
+    <select id="getICode" resultType="java.lang.String">
+        select ui_code from userinfo where ui_code=#{icode}
+    </select>
+    <select id="getIUser" resultType="cn.qiandao.shengqianyoudao.pojo.Breviary" resultMap="attMap">
+        select ui_number,ui_name,ui_img,ui_code from invitationinfo,userinfo where ii_usernumber=#{usernumber} and ii_familynumber=ui_number
+    </select>
+    <insert id="saveICode">
+        insert into invitationinfo values(0,#{usernumber},(select ui_number from userinfo where ui_code=#{code}),0,"2019-01-05")
+    </insert>
+    <select id="repeatICode" resultType="int">
+        select count(1) from invitationinfo where (ii_usernumber=#{usernumber} and ii_familynumber=(select ui_number from userinfo where ui_code=#{code})) or (ii_usernumber=(select ui_number from userinfo where ui_code=#{code}) and ii_familynumber=#{usernumber})
+    </select>
+    <update id="deleteUser">
+        update userinfo set ui_state=0 where ui_number=#{usernumber}
+    </update>
+
+
+</mapper>

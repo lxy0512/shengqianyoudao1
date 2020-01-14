@@ -19,7 +19,6 @@ public class Taskinfo implements Serializable {
      * 任务编号
      */
     @Id
-
     private String tiTasknumber;
 
     /**

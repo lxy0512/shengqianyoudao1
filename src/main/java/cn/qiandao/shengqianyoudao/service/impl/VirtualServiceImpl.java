@@ -68,7 +68,7 @@ public class VirtualServiceImpl implements VirtualService {
     }
 
     @Override
-    //@Transactional
+    @Transactional
     public String sellByRate(double rate,double vc,String uid){
         try {
             double total = rate * vc;
@@ -110,7 +110,7 @@ public class VirtualServiceImpl implements VirtualService {
                 int i = cashrecordsService.addCashrecords(cashrecords);
                 return i;
             });
-            if (future1.get() == 1) {
+            if (future2.get() == 1) {
                 log.info("现金插入成功");
             } else {
                 log.info("现金插入失败");

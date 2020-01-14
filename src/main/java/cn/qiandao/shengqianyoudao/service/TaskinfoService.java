@@ -2,6 +2,7 @@ package cn.qiandao.shengqianyoudao.service;
 
 
 import cn.qiandao.shengqianyoudao.pojo.Taskinfo;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.javassist.runtime.Desc;
 
 import java.util.List;
@@ -48,5 +49,32 @@ public interface TaskinfoService {
      * @return
      */
     List<Taskinfo> getTaskState(String user, int state);
+
+    /**
+     * 接受任务
+     * @param tiPeoplelimit 截止人数
+     * @param taskid 任务编号
+     * @return
+     */
+    int acceptTask(int tiPeoplelimit, String taskid);
+
+    //补全后台接口
+
+    /**
+     * 修改任务
+     * @param taskid 任务编号
+     * @param state 状态
+     * @return
+     */
+    int updateTask(String taskid, int state);
+
+    /**
+     * 分页查询所有任务
+     * @param state 不同状态
+     * @param pageNum  //第几页
+     * @param pageSize  //每页显示的个数
+     * @return
+     */
+    PageInfo<Taskinfo> getAllTask(int state, int pageNum, int pageSize);
 
 }

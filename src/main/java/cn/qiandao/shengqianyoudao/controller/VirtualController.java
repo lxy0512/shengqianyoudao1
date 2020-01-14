@@ -50,8 +50,8 @@ public class VirtualController {
     }
 
     @ApiOperation(value = "出售金币", notes = "出售金币")
-    @GetMapping("/sellVc")
-    public String sellVc(double rate,double vc,String uid){
+    @GetMapping("/sellVc/{rate}/{vc}/{uid}")
+    public String sellVc(@PathVariable("rate")double rate,@PathVariable("vc")double vc,@PathVariable("uid")String uid){
         return virtualService.sellByRate(rate,vc,uid);
     }
 }

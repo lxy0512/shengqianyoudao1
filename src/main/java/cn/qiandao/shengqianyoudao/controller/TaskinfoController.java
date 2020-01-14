@@ -5,6 +5,7 @@ import cn.qiandao.shengqianyoudao.pojo.Taskinfo;
 import cn.qiandao.shengqianyoudao.pojo.Userinfo;
 import cn.qiandao.shengqianyoudao.service.TaskinfoService;
 import cn.qiandao.shengqianyoudao.service.UserService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -74,4 +75,21 @@ public class TaskinfoController {
         return taskinfoService.getTaskState(user,state);
     }
 
+    @GetMapping("/acceptTask/{taskid}/{tiPeoplelimit}")
+    @ApiOperation(value = "接受任务)",notes = "接受任务")
+    public int acceptTask(@PathVariable("tiPeoplelimit") int tiPeoplelimit,@PathVariable("taskid") String taskid){
+        return taskinfoService.acceptTask(tiPeoplelimit,taskid);
+    }
+
+    @PutMapping("/updateTask/{taskid}/{state}")
+    @ApiOperation(value = "后台修改任务的state",notes = "后台修改任务的state")
+    public int updateTask(@PathVariable("taskid") String taskid,@PathVariable("state") int state){
+        return taskinfoService.updateTask(taskid,state);
+    }
+
+    @PutMapping("/getAllTask/{state}/{pageNum}/{pageSize}")
+    @ApiOperation(value = "分页查询所有任务",notes = "分页查询所有任务")
+    public PageInfo<Taskinfo> getAllTask(@PathVariable("state") int state,@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize){
+        return taskinfoService.getAllTask(state,pageNum,pageSize);
+    }
 }

@@ -7,6 +7,8 @@ import cn.qiandao.shengqianyoudao.pojo.User;
 import cn.qiandao.shengqianyoudao.pojo.Userinfo;
 import cn.qiandao.shengqianyoudao.service.TaskinfoService;
 import cn.qiandao.shengqianyoudao.service.UserService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +37,12 @@ public class TaskinfoServiceImpl implements TaskinfoService {
         //1.将传进来的参数加入实体类
         Taskinfo taskinfo = new Taskinfo();
         taskinfo.setTiTasknumber(taskid);
-
         //2.用selectOne放入实体类  利用实体类中的参数进行查询  返回实体类
         Taskinfo task = taskinfoMapper.selectOne(taskinfo);
-
         //3.因user和任务锁绑定  利用任务查询出来的用户id 当参数用userservice的方法进行查询用户
         Userinfo user = userService.findById(task.getTiUsernumber());
-
         //4.将user放入task实体类中封装
         task.setUser(user);
-
         //6.返回对象
         return task;
     }
@@ -96,6 +94,35 @@ public class TaskinfoServiceImpl implements TaskinfoService {
         taskinfo.setTiUsernumber(user);
         taskinfo.setTiState(state);
         return taskinfoMapper.select(taskinfo);
+    }
+    //接受任务，截止人数减一
+    @Override
+    public int acceptTask(int tiPeoplelimit, String taskid) {
+        Taskinfo taskinfo = selectTask(taskid);
+        taskinfo.setTiPeoplelimit(taskinfo.getTiPeoplelimit() - 1);
+        tiPeoplelimit = taskinfo.getTiPeoplelimit();
+        int i = taskinfoMapper.updateByExample(taskinfo, tiPeoplelimit);
+        return i;
+    }
+
+    @Override
+    public int updateTask(String taskid, int state) {
+        Taskinfo taskinfo = new Taskinfo();
+        taskinfo.setTiTasknumber(taskid);
+        taskinfo.setTiState(state);
+        return taskinfoMapper.updateByPrimaryKeySelective(taskinfo);
+    }
+
+    @Override
+    public PageInfo<Taskinfo> getAllTask(int state,int pageNum, int pageSize) {
+        //设置分页器
+        PageHelper.startPage(pageNum,pageSize);
+
+        Taskinfo taskinfo = new Taskinfo();
+        taskinfo.setTiState(state);
+        List<Taskinfo> taskinfos = taskinfoMapper.select(taskinfo);
+        PageInfo<Taskinfo> page = new PageInfo<>(taskinfos);
+        return page;
     }
 
 }

@@ -34,19 +34,27 @@ public class SkillorderServiceImpl implements SkillorderService {
     public Long addKillOrder(Skillorder skillorder) {
         //当前时间（为了简化模板）
         Date orderTime = new Date();
-        Calendar now = Calendar.getInstance();
         //雪花算法生成随机数
         Long orderNo = snowFlake.nextId();
-        //订单编号
-        skillorder.setSoNumber(orderNo);
-        //购买的时间(订单时间)
-        skillorder.setSoPurchasingdate(orderTime);
+        if (skillorder.getSoSkillnumber() != null&&
+                skillorder.getSoSkilluser() != null&&
+                skillorder.getSoQuantity() != null&&
+                skillorder.getSoMoney() != null&&
+                skillorder.getSoPaymentmethod() != null&&
+                skillorder.getSoState() != null){
+            //订单编号
+            skillorder.setSoNumber(orderNo);
+            //购买的时间(订单时间)
+            skillorder.setSoPurchasingdate(orderTime);
+            Skillsinfo skillsinfo = skillsinfoService.selectBySiSerialnumber(skillorder.getSoSkillnumber());
+            skillorder.setTitle(skillsinfo.getSiTitle());
+            int i = skillorderMapper.insert(skillorder);
+            System.out.println(i);
+            return orderNo;
+        }else {
+            return null;
+        }
 
-        Skillsinfo skillsinfo = skillsinfoService.selectBySiSerialnumber(skillorder.getSoSkillnumber());
-        skillorder.setTitle(skillsinfo.getSiTitle());
-        int i = skillorderMapper.insert(skillorder);
-        System.out.println(i);
-        return orderNo;
     }
     //修改技能订单状态
     @Override

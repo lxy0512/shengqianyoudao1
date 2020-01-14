@@ -72,11 +72,19 @@ public class VirtualServiceImpl implements VirtualService {
     public String sellByRate(double rate,double vc,String uid){
         try {
             double total = rate * vc;
-            Userinfo byId = userService.findById(uid);
-            if (byId == null) {
-                return "用户不存在";
+            Userinfo o = (Userinfo) redisTemplate.opsForValue().get("用户" + uid);
+            log.info("redis用户:" + o);
+            if(o == null){
+                o = userService.findById(uid);
+                log.info("用户：" + o);
+                redisTemplate.opsForValue().set("用户" + uid,o);
             }
-            double vcrGatheringbalance = byId.getVcbalance().doubleValue();
+            /*if (o == null) {
+                return "用户不存在";
+            }*/
+            double vcrGatheringbalance = o.getVcbalance().doubleValue();
+            double vcrVcbalance = o.getCashbalance().doubleValue();
+            log.info(String.valueOf(vcrGatheringbalance));
             if (vcrGatheringbalance < total) {
                 return "金额超出范围";
             }
@@ -93,11 +101,11 @@ public class VirtualServiceImpl implements VirtualService {
                 int i = addVirtualcords(vcc);
                 return i;
             });
-            if (future1.get() == 1) {
+            /*if (future1.get() == 1) {
                 log.info("金币插入成功");
             } else {
                 log.info("金币插入失败");
-            }
+            }*/
             Future<Integer> future2 = executor.submit(() -> {
                 System.out.println("task is executed");
                 Cashrecords cashrecords = new Cashrecords();
@@ -106,34 +114,22 @@ public class VirtualServiceImpl implements VirtualService {
                 cashrecords.setCrDate(new Date());
                 cashrecords.setCrCause("1");
                 cashrecords.setCrGatheringusernumber(uid);
-                cashrecords.setCrGatheringbalance(BigDecimal.valueOf(byId.getCashbalance().doubleValue() - total));
+                cashrecords.setCrGatheringbalance(BigDecimal.valueOf(vcrVcbalance-total));
                 int i = cashrecordsService.addCashrecords(cashrecords);
                 return i;
             });
-            if (future2.get() == 1) {
+            /*if (future2.get() == 1) {
                 log.info("现金插入成功");
             } else {
                 log.info("现金插入失败");
-            }
+            }*/
 
-            double cash = (double) redisTemplate.opsForValue().get("cash");
-            cash -= total;
-            double gold = (double) redisTemplate.opsForValue().get("gold");
-            gold -= vc;
             JSONObject jo = new JSONObject();
-            jo.put("cash", cash);
-            jo.put("gold", gold);
+            jo.put("cash", o.getCashbalance().doubleValue()-total);
+            jo.put("gold", o.getVcbalance().doubleValue()-vc);
             return String.valueOf(jo);
         }catch (Exception e){
             return "出售失败";
         }
-    }
-    public static void main(String[] args) throws Exception {
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        Future<Integer> future = executor.submit(() -> {
-            System.out.println("task is executed");
-            return 1;
-        });
-        System.out.println("task execute time is: " + future.get());
     }
 }

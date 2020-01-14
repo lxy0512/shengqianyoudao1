@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.qiandao.shengqianyoudao.mapper.LoginMapper">
+
+    <resultMap id="LoginMap" type="cn.qiandao.shengqianyoudao.pojo.User">
+        <!--@mbg.generated-->
+        <!--@Table userinfo-->
+        <result column="ui_number" jdbcType="VARCHAR" property="number" />
+        <result column="ui_name" jdbcType="VARCHAR" property="username" />
+        <result column="ui_img" jdbcType="VARCHAR" property="img" />
+        <result column="ui_bgimg" jdbcType="VARCHAR" property="bgimg" />
+        <result column="ui_phone" jdbcType="VARCHAR" property="phone" />
+        <result column="ui_grade" jdbcType="INTEGER" property="grade" />
+        <result column="ui_code" jdbcType="VARCHAR" property="invitationcode" />
+        <result column="ui_signature" jdbcType="VARCHAR" property="signature" />
+        <result column="ui_registrationdate" jdbcType="DATE" property="registrationdate" />
+        <result column="ui_cashbalance" jdbcType="DECIMAL" property="cashbalance" />
+        <result column="ui_virtualcurrencybalance" jdbcType="DECIMAL" property="vcbalance" />
+        <result column="ui_exp" jdbcType="INTEGER" property="exp" />
+        <result column="ubi_name" jdbcType="VARCHAR" property="name" />
+        <result column="ubi_familyname" jdbcType="VARCHAR" property="familyname" />
+        <result column="ubi_language" jdbcType="INTEGER" property="language" />
+        <result column="ubi_gender" jdbcType="INTEGER" property="gender" />
+        <result column="ubi_birth" jdbcType="DATE" property="birth" />
+        <result column="ubi_area" jdbcType="INTEGER" property="area" />
+        <result column="ubi_documenttype" jdbcType="INTEGER" property="documenttype" />
+        <result column="ubi_documentnumber" jdbcType="LONGVARCHAR" property="documentnumber" />
+        <result column="ubi_educationbackground" jdbcType="INTEGER" property="educationbackground" />
+        <result column="ubi_educationexperience" jdbcType="VARCHAR" property="educationexperience" />
+        <result column="ubi_industry" jdbcType="INTEGER" property="industry" />
+        <result column="ubi_workingexperience" jdbcType="VARCHAR" property="workingexperience" />
+        <result column="ubi_incomerange" jdbcType="INTEGER" property="incomerange" />
+        <result column="ubi_email" jdbcType="VARCHAR" property="email" />
+        <result column="ubi_wechat" jdbcType="VARCHAR" property="wechat" />
+    </resultMap>
+
+    <select id="getPasswordByUsername" resultType="java.lang.String">
+        select ui_pwd from userinfo where ui_phone=#{name}
+    </select>
+    <select id="getPhone" resultType="java.lang.String">
+        select ui_phone from userinfo where ui_phone=#{phone}
+    </select>
+    <insert id="saveRegisterUser">
+        insert into userinfo values (0,#{user.number},#{user.username},#{user.pwd},#{user.img},#{user.bgimg},#{user.phone},#{user.grade},#{user.state},#{user.invitationcode},#{user.signature},#{user.registrationdate},#{user.cashbalance},#{user.vcbalance},#{user.exp})
+    </insert>
+    <insert id="saveRegisterUserbasic">
+        insert into userbasicinfo values (
+        #{user.number}
+        <if test="user.name != null">
+            ,#{user.name}
+        </if>
+        <if test="user.familyname != null">
+            ,#{user.familyname}
+        </if>
+        <if test="user.language != null">
+            ,#{user.language}
+        </if>
+        <if test="user.gender != null">
+            ,#{user.gender}
+        </if>
+        <if test="user.birth != null">
+            ,#{user.birth}
+        </if>
+        <if test="user.area != null">
+            ,#{user.area}
+        </if>
+        <if test="user.documenttype != null">
+            ,#{user.documenttype}
+        </if>
+        <if test="user.documentnumber != null">
+            ,#{user.documentnumber}
+        </if>
+        <if test="user.educationbackground != null">
+            ,#{user.educationbackground}
+        </if>
+        <if test="user.educationexperience != null">
+            ,#{user.educationexperience}
+        </if>
+        <if test="user.industry != null">
+            ,#{user.industry}
+        </if>
+        <if test="user.workingexperience != null">
+            ,#{user.workingexperience}
+        </if>
+        <if test="user.incomerange != null">
+            ,#{user.incomerange}
+        </if>
+        <if test="user.email != null">
+            ,#{user.email}
+        </if>
+        <if test="user.wechat != null">
+            ,#{user.wechat}
+        </if>
+        )
+    </insert>
+    <select id="getUserInfo" resultType="cn.qiandao.shengqianyoudao.pojo.User" resultMap="LoginMap">
+        select ui_number,ui_name,ui_img,ui_bgimg,ui_phone,ui_grade,ui_code,ui_signature,ui_registrationdate,ui_cashbalance,
+        ui_virtualcurrencybalance,ubi_name,ubi_familyname,ubi_language,ubi_gender,ubi_birth,ubi_area,ubi_documenttype,ubi_documentnumber,ubi_educationbackground,
+        ubi_educationexperience,ubi_industry,ubi_workingexperience,ubi_incomerange,ubi_email,ubi_wechat from userinfo,userbasicinfo where ui_phone=#{getPhone} and ui_number=ubi_usernumber
+    </select>
+    <select id="getNumber" resultType="java.lang.String">
+        select ui_number from userinfo order by ui_id desc limit 0,1
+    </select>
+    <insert id="saveUserRole">
+        insert into userrole values (0,#{userNumber},"js01")
+    </insert>
+    <select id="getpermissions" resultType="java.lang.String">
+        select rp_permissionnumber from rolepermission where rp_rolenumber=#{role}
+    </select>
+    <select id="getrole" resultType="java.lang.String">
+        select ur_rolenumber from userrole where ur_usernumber=#{number}
+    </select>
+    <update id="changPwd">
+        update userinfo set ui_pwd = #{pwd} where ui_phone = #{phone}
+    </update>
+    <select id="getUserByNumberOnRole" resultType="java.lang.String">
+        select ur_rolenumber from userrole where ur_usernumber=#{userNumber}
+    </select>
+    <insert id="saveInvitationInfo">
+        insert into invitationinfo values (0,#{number},#{fNumber},0,#{date})
+    </insert>
+    <insert id="saveNovTaskInfo">
+        insert into novicetaskaccomplished values (0,#{number},#{fname},0,#{datetime})
+    </insert>
+    <select id="getNumberByIcode" resultType="java.lang.String">
+        select ui_number from userinfo where ui_code = #{icode}
+    </select>
+
+</mapper>

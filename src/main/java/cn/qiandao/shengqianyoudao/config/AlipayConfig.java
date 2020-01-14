@@ -1,0 +1,18 @@
+package cn.qiandao.shengqianyoudao.config;
+
+/**
+ * @author lxy
+ * @date 2020/1/8 0008 20:32
+ **/
+public class AlipayConfig {
+    public static String app_id = "2016101500694812";
+    public static String merchant_private_key ="MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCoHfDBdar1ZGR1jHlPqvf0qghNmFRp/jN4U13NczQN+Y6rPbbGUVGfBWzLCZTMrIIwx2ZBytFykwX8T2Rap+xUfJjw66T62E0HL/nkidTIUbIfuigf+nlgDoL/D1oTJMTCWgCJyI7DjbRuUmCVGYVaB1gDf/EBZrAj5mwPIo//dnU858XpYJrc0g0QcElLEqxkGdecgqb53QgH0jbge67xfHQkTBeizqIVVBUWxBhvrQoNpJZFVedl/lNWJyuXPl0QmDlISpiO6feuaRvdx3azH8+MBfEdYEq64qPYJbux4/1d0KLZkA1EaIRBPjLJsZrKL5RXflpzILXZk7VfwhTFAgMBAAECggEBAJ32E+MStqF/xMyWQt3SXMysfsS53ocA7EegvUBvgHepBp5rjDLm8XQjWsejpwZxCJrgoHotIYMwFa2uwzJTGcGAmQu1vfxcBHQ+ZeSQhTf7Wwxok48If8b7m6YgPJhEMgQTIPJVWZ7wpJoMGOe/ZQbkY5RWQJL6c4In3VyTMw3qKwsArlaRmI+ngPMhxpgo5B1S0xaIQ/opZC7Nb7LRSzEaYcyCRN9BJbcTh/19rUTTgFtDKonw4HjKkJXYFLn+qmf5MaiMYucQIHmxYyj2wQptK1RKGFE/3gpxrV0WIig8apV9Dq9yYIT7FA9v/OPy6xqAhG3Ky1DsMImqBxX2NAECgYEA80akfPX51XrNMKEYw6NOU2q+QHaa4IYRF0Jms2iyolOckYvlZGdhgk7CWBQQ3BKaev6wbtn74nojD+zCAKifM5JoACGUmd2kM4OKLFKOh6+19DwRU+x1xdU3qvl+gUh4sgndIUUvqa07TpJEV7jz5gG441P8/bvPVGd375U6bIECgYEAsOjzxC1YuQ4seDc5Jlg9Spr9plMysCrSTuAreNL309eySshX3GzIMMc4kUeOIfRBNRt2ATvcWYp8z7hIKe8dZL+zg2Kzc/CTd/sjD/6WsJC6gofZWyaFocwvQlfbq/8uK3dwjLG263ip2bRhXRC5pw7XKZ3UHyWwT7Pu65TP1kUCgYA4OeyMgSFkCMTh52nc1aKlvvcH2SHEoNfUY2FvN9SJlf+K2CWFhitQPbnHN6QJ6TbRFIpcpH8GAiqWZKcWFeLtvXnSBfDdew+XZGCMC+yrSZ4pO7TZi75Qog4CszVc1g4nQAZeySnR8prRdxbam4GreFxuFhxT3JN3s45RzlC5gQKBgHu120kTQNjfrX8/dsp2qB20tq2Jvods2nZn0l6CgOV2D2q2IKK2u2NI3SjStfTOfo7priJ8vsEq087aGjSgzpg2agz1h3ILCMS9LK6xpKTCAHrpDrjr/kS/qUimcaocHygsNNteJwEQ9w2TUwamfHzzJskmYkCJtXp25Bt/i7tVAoGBAJml1+CB/iRg/hkkl0tgqYLW9K50ieQY6JxIozQ4Z09+2jzRvV4qBAYzwuKbdMJ4bFOL31z860jQ2W0/pWv2PefCYBhfH6Ilendb9kmq4IdBmPVexVX0VUdSTqLcGoc2yFT0g8vhXqnTZRUuJ13OSgj3BZcJIQNnuFAWhQPijPOk";
+    public static String alipay_public_key ="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtL3ORUKdHItz14sCZQtylw2sLRD01w1Z+NL0JUzbXM3OmTZ/R74jOKOEtBDOrH7a0xcRTBIwWS7DJCnjGJgfs0hlii260tauUXQrrphLXxbq5Hn7rq9QjpsXsSvB8FTr3GTrjhcAabbRz47L50inmMWHcYxJBXuK1uWvVnmywfLy5BWC6abmezB9SbqBQu7AH4laKh0j2MtGbEz3i/BICIiPwXi6uKQv5j8ookmCai46ex8VRuFp1q5sb6/KrHj3Zlnd9p595Ram8T3dYcf5fb/5gN6A4niR4D5SaEZWIUg8RG7Xn9RIW/0MQcTxddeVfIwRicEkfe03e02p+GU6cQIDAQAB";
+    public static String notify_url = "http://192.168.0.5:8080/aliPay/notify_url";
+    public static String return_url = "http://192.168.0.5:8080/aliPay/return_url";
+    public static String sign_type = "RSA2";
+    public static String charset = "utf-8";
+    public static String gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
+    public static String log_path = "F:\\";
+    public static String domain = "http://qiandao.xgl6.top";
+}

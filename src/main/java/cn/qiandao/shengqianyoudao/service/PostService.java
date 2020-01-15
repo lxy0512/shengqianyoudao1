@@ -15,4 +15,5 @@ public interface PostService {
     List<Post> getAllPostByType(String typename);
     Post getPostByType(String postnumber);
     String comment(reply reply, String postnumber);
+    List<Post> getAllPost(String pagenum);
 }

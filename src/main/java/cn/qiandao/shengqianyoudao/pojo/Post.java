@@ -25,6 +25,8 @@ public class Post {
 
     private String content;
 
+    private int state;
+
     private String images;
 
     private Date date;

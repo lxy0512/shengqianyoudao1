@@ -26,9 +26,9 @@ public class UserInfoController {
     /**
      * 修改个人信息
      */
-    @RequestMapping("/change/{user}")
+    @RequestMapping("/change")
     @ResponseBody
-    public String changeUserInfo(@PathVariable("user") User user){
+    public String changeUserInfo(@RequestBody User user){
         return usi.changeUserInfo(user);
     }
 
@@ -70,13 +70,23 @@ public class UserInfoController {
     }
 
     /**
-     * 后台查看用户信息
+     * 后台查看用户列表
      */
-//    @RequestMapping("/getinfo/{phone}")
-//    @ResponseBody
-//    public List<User> getUserInfo(@PathVariable("phone")String phone){
-//        return lsi.getUserInfo(phone);
-//    }
+    @RequestMapping("/getinfo/{pagenum}")
+    @ResponseBody
+    public List<Breviary> getAllUserInfo(@PathVariable("pagenum")String pagenum) {
+        return usi.getAllUserInfo(pagenum);
+    }
+
+    /**
+     * 查看用户信息
+     */
+    @RequestMapping("/getinfolist/{usernumber}")
+    @ResponseBody
+    public User getUserInfo(@PathVariable("usernumber")String usernumber){
+        return usi.getuserinfo(usernumber);
+    }
+
 
     /**
      * 后台删除用户信息

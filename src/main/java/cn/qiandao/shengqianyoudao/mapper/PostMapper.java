@@ -23,4 +23,5 @@ public interface PostMapper {
     int updatePostReplies(@Param("postnumber") String postnumber);
     String getName(@Param("aimnumber") String aimnumber);
     List<Post> gethotpost();
+    List<Post> getAllPost(int page);
 }

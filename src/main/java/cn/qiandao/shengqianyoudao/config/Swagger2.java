@@ -17,7 +17,7 @@ public class Swagger2 {
                 .apiInfo(apiInfo())
                 .groupName("钱道测试分组1")
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("cn.qiandao.qiandao.controller"))
+                .apis(RequestHandlerSelectors.basePackage("cn.qiandao.shengqianyoudao.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -37,7 +37,7 @@ public class Swagger2 {
                 .apiInfo(apiInfo())
                 .groupName("钱道测试分组2")
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("cn.qiandao.qiandao.controller"))
+                .apis(RequestHandlerSelectors.basePackage("cn.qiandao.shengqianyoudao.controller"))
                 .paths(PathSelectors.ant("/show/**"))
                 .build();
     }

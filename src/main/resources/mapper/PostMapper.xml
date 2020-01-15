@@ -50,6 +50,6 @@
         select ui_name,pi_number,pi_title,st_content,pi_content,pi_date,pi_replies from postinfo,skilltype,userinfo where ui_number=pi_usernumber and st_number=pi_type and pi_state=1 order by pi_replies desc
     </select>
     <select id="getAllPost" resultType="cn.qiandao.shengqianyoudao.pojo.Post" resultMap="postMap">
-        select ui_name,pi_number,pi_title,st_content,pi_content,pi_date,pi_replies,pi_state from postinfo,skilltype,userinfo where ui_number=pi_usernumber and st_number=pi_type limit #{page},5
+        select ui_name,pi_number,pi_title,st_content,pi_content,pi_date,pi_replies,pi_state from postinfo,skilltype,userinfo where ui_number=pi_usernumber and st_number=pi_type
     </select>
 </mapper>

@@ -2,9 +2,12 @@ package cn.qiandao.shengqianyoudao.service.impl;
 
 import cn.qiandao.shengqianyoudao.mapper.PostMapper;
 import cn.qiandao.shengqianyoudao.pojo.Post;
+import cn.qiandao.shengqianyoudao.pojo.Userinfo;
 import cn.qiandao.shengqianyoudao.pojo.reply;
 import cn.qiandao.shengqianyoudao.service.PostService;
 import cn.qiandao.shengqianyoudao.util.IDUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,9 +80,13 @@ public class PostServiceImpl implements PostService {
         return "发布失败";
     }
 
-    public List<Post> getAllPost(String pagenum){
-        int page = (Integer.valueOf(pagenum) -1 )*5;
-        return pm.getAllPost(page);
+
+    @Override
+    public PageInfo<Post> getAllPost(int pageNum, int pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        List<Post> allPost = pm.getAllPost();
+        PageInfo<Post> page = new PageInfo<>(allPost);
+        return page;
     }
 
 }

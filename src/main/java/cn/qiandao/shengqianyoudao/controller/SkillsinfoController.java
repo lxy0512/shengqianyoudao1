@@ -5,6 +5,8 @@ import cn.qiandao.shengqianyoudao.service.SkillcommentService;
 import cn.qiandao.shengqianyoudao.service.SkillsinfoService;
 import cn.qiandao.shengqianyoudao.service.UserService;
 import cn.qiandao.shengqianyoudao.util.IDUtil;
+import com.alipay.api.domain.Person;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -107,10 +109,10 @@ public class SkillsinfoController {
         return skillsinfoService.getByUserId(userId);
     }
 
-    @GetMapping("/getAllSkills/{state}/{pageNum}/{pageSize}")
+    @GetMapping("/getAllSkills")
     @ApiOperation(value = "分页查询所有任务",notes = "分页查询所有任务")
-    public PageInfo<Skillsinfo> getAllSkills(@PathVariable("state") int state, @PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize){
-        return skillsinfoService.getAllSkills(state,pageNum,pageSize);
+    public PageInfo<Skillsinfo> getAllSkills(@RequestParam int state,@RequestParam int pageNum,@RequestParam int pageSize){
+        return skillsinfoService.getAllSkills(state);
     }
 
 }

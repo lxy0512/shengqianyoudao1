@@ -2,13 +2,15 @@ package cn.qiandao.shengqianyoudao.service.impl;
 
 
 import cn.qiandao.shengqianyoudao.mapper.UserInfoMapper;
-import cn.qiandao.shengqianyoudao.pojo.User;
-import cn.qiandao.shengqianyoudao.pojo.Breviary;
+import cn.qiandao.shengqianyoudao.pojo.*;
 import cn.qiandao.shengqianyoudao.service.UserInfoService;
+import cn.qiandao.shengqianyoudao.service.UserService;
 import cn.qiandao.shengqianyoudao.util.DateTime;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
  * @Author wt
  * @data
  */
+@Slf4j
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
 
@@ -25,7 +28,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserInfoMapper uim;
     @Autowired
     private DateTime dateTime;
-
+    @Autowired
+    private UserService userService;
+    @Override
     public String changeUserInfo(User user){
         int count = uim.changeUserInfo(user);
         int count2 = uim.changeUserBasicInfo(user);
@@ -42,6 +47,7 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @param code
      * @return
      */
+    @Override
     public ArrayList<Breviary> attention(String usernumber, int code){
         if (usernumber == null){
             return null;
@@ -64,6 +70,7 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @param usernumber
      * @return
      */
+    @Override
     public Breviary invitationCodeNull(String usernumber){
         Breviary iUser = uim.getIUser(usernumber);
         System.out.println(iUser);
@@ -80,7 +87,8 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @param code
      * @return
      */
-    public String      invitationCode(String usernumber,String code){
+    @Override
+    public String invitationCode(String usernumber, String code){
         if(uim.getICode(code) == null){
             return "此邀请码不存在";
         }else {
@@ -96,6 +104,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
     }
 
+    @Override
     public String deleteUser(String usernumber){
         if (uim.deleteUser(usernumber) > 0){
             return "删除成功";
@@ -103,13 +112,19 @@ public class UserInfoServiceImpl implements UserInfoService {
         return "删除失败";
     }
 
+    @Override
     public User getuserinfo(String usernumber){
         return uim.getUserInfo(usernumber);
     }
 
-    public List<Breviary> getAllUserInfo(String pagenum){
-        int page = (Integer.valueOf(pagenum) -1)*5;
-        return uim.getAllUserInfo(page);
+    @Override
+    public PageInfo<User> getAllUser(int pageNum, int pageSize) {
+        //设置分页器
+        PageHelper.startPage(pageNum,pageSize);
+        List<User> userinfos = uim.getUserInfolist();
+        log.info("" + userinfos);
+        PageInfo<User> page = new PageInfo<>(userinfos);
+        return page;
     }
 
 }

@@ -28,4 +28,5 @@ public interface UserInfoMapper {
     int deleteUser(String usernumber);
     List<Breviary> getAllUserInfo(int page);
     User getUserInfo(@Param("usernumber")String usernumber);
+    List<User> getUserInfolist();
 }

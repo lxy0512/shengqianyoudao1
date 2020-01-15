@@ -3,11 +3,11 @@ package cn.qiandao.shengqianyoudao.controller;
 import cn.qiandao.shengqianyoudao.pojo.*;
 import cn.qiandao.shengqianyoudao.service.impl.LoginServiceImpl;
 import cn.qiandao.shengqianyoudao.service.impl.UserInfoServiceImpl;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Description
@@ -72,12 +72,11 @@ public class UserInfoController {
     /**
      * 后台查看用户列表
      */
-    @RequestMapping("/getinfo/{pagenum}")
+    @RequestMapping("/getinfo/{pageNum}/{pageSize}")
     @ResponseBody
-    public List<Breviary> getAllUserInfo(@PathVariable("pagenum")String pagenum) {
-        return usi.getAllUserInfo(pagenum);
+    public PageInfo<User> getAllUser(@PathVariable("pageNum") int pageNum,@PathVariable("pageSize") int pageSize) {
+        return usi.getAllUser(pageNum,pageSize);
     }
-
     /**
      * 查看用户信息
      */

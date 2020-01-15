@@ -185,8 +185,8 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
         Skillsinfo skillsinfo = new Skillsinfo();
         skillsinfo.setSiState(0);
         List<Skillsinfo> select = skillsinfoMapper.select(skillsinfo);
-        List<Skillsinfo> select1 = new ArrayList<>();
-        List<Skillsinfo> select2 = new ArrayList<>();
+        List<Skillsinfo> select1 = PageHelper.startPage(1,4);
+        List<Skillsinfo> select2 = PageHelper.startPage(1,4);
         for (Skillsinfo si : select) {
             Skilltype skilltype1 = skilltypeService.selByStNumber(si.getSiType());
             si.setSiType(getSiiType(si.getSiType()));
@@ -211,7 +211,7 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
         }
         PageInfo<Skillsinfo> pageInfo = null;
         if(state == 1){
-            pageInfo = new PageInfo<Skillsinfo>(select1);
+            pageInfo = new PageInfo<Skillsinfo>(select1,4);
             //return select1;
         }else {
             pageInfo = new PageInfo<Skillsinfo>(select2);

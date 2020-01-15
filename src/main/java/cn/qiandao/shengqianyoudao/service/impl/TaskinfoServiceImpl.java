@@ -124,5 +124,9 @@ public class TaskinfoServiceImpl implements TaskinfoService {
         PageInfo<Taskinfo> page = new PageInfo<>(taskinfos);
         return page;
     }
+    @Override
+    public int delTask(String taskid) {
+        return taskinfoMapper.deleteByPrimaryKey(taskid);
+    }
 
 }

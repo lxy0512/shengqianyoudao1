@@ -150,6 +150,13 @@
         from userinfo,userbasicinfo,userrole,role,rolepermission
         where ui_number=#{usernumber} and ui_number=ubi_usernumber and ubi_usernumber=ur_usernumber and ur_rolenumber=ro_number and rp_rolenumber=ro_number and ui_state=1
     </select>
-
+    <select id="getUserInfolist" resultType="cn.qiandao.shengqianyoudao.pojo.User" resultMap="UserMap">
+        select ui_number,ui_name,ui_pwd,ui_img,ui_bgimg,ui_phone,ui_grade,ui_state,ui_code,ui_signature,ui_registrationdate,ui_cashbalance,
+        ui_virtualcurrencybalance,ubi_name,ubi_familyname,ubi_language,ubi_gender,ubi_birth,ubi_area,ubi_documenttype,
+        ubi_documentnumber,ubi_educationbackground,ubi_educationexperience,ubi_industry,ubi_workingexperience,ubi_incomerange,ubi_email,
+        ubi_wechat,ro_name,rp_permissionnumber,ui_creditscore
+        from userinfo,userbasicinfo,userrole,role,rolepermission
+        where ui_number=ubi_usernumber and ubi_usernumber=ur_usernumber and ur_rolenumber=ro_number and rp_rolenumber=ro_number
+    </select>
 
 </mapper>

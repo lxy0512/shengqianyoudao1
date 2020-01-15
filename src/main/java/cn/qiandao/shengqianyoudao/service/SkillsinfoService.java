@@ -83,6 +83,6 @@ public interface SkillsinfoService {
      */
     List<Skillsinfo> getByUserId(String userId);
 
-    PageInfo<Skillsinfo> getAllSkills(int state, int pageNum, int pageSize);
+    PageInfo<Skillsinfo> getAllSkills(int state);
 
 }

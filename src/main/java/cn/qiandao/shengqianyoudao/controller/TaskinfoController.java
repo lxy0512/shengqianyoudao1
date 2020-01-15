@@ -92,4 +92,10 @@ public class TaskinfoController {
     public PageInfo<Taskinfo> getAllTask(@RequestParam int state,@RequestParam int pageNum,@RequestParam  int pageSize){
         return taskinfoService.getAllTask(state,pageNum,pageSize);
     }
+
+    @DeleteMapping("/delTask")
+    @ApiOperation(value = "通过任务编号删除任务",notes = "通过任务编号删除任务")
+    public int delTask(String taskid){
+        return taskinfoService.delTask(taskid);
+    }
 }

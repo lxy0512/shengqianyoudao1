@@ -3,6 +3,8 @@ package cn.qiandao.shengqianyoudao.controller;
 import cn.qiandao.shengqianyoudao.pojo.Post;
 import cn.qiandao.shengqianyoudao.pojo.reply;
 import cn.qiandao.shengqianyoudao.service.impl.PostServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +26,10 @@ public class PostController {
     /**
      * 后台查看所有帖子
      */
-    @RequestMapping("/get/{pagenum}")
-    public List<Post> getAllPost(@PathVariable("pagenum") String pagenum){
-        return psi.getAllPost(pagenum);
+    @RequestMapping("/get/{pageNum}/{pageSize}")
+    public PageInfo<Post> getAllPost(@PathVariable("pageNum")int pageNum, @PathVariable("pageSize")int pageSize){
+        return psi.getAllPost(pageNum,pageSize);
     }
-
     /**
      * 获取某个类型的全部帖子
      * @param typename

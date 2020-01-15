@@ -76,5 +76,10 @@ public interface TaskinfoService {
      * @return
      */
     PageInfo<Taskinfo> getAllTask(int state, int pageNum, int pageSize);
-
+    /**
+     * 通过任务id删除任务
+     * @param taskid 任务编号
+     * @return
+     */
+    int delTask(String taskid);
 }

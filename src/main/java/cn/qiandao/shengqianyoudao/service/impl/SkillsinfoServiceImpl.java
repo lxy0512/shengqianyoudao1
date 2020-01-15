@@ -180,14 +180,15 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
     }
 
     @Override
-    public PageInfo<Skillsinfo> getAllSkills(int state, int pageNum, int pageSize) {
-        //设置分页器
-        PageHelper.startPage(pageNum,pageSize);
+    public PageInfo<Skillsinfo> getAllSkills(int state) {
+        PageHelper.startPage(1,4);
         Skillsinfo skillsinfo = new Skillsinfo();
-        skillsinfo.setSiState(state);
+        skillsinfo.setSiState(0);
         List<Skillsinfo> select = skillsinfoMapper.select(skillsinfo);
-        List<Skillsinfo> select1 = null;
+        List<Skillsinfo> select1 = new ArrayList<>();
+        List<Skillsinfo> select2 = new ArrayList<>();
         for (Skillsinfo si : select) {
+            Skilltype skilltype1 = skilltypeService.selByStNumber(si.getSiType());
             si.setSiType(getSiiType(si.getSiType()));
             if (si.getSiImg().indexOf(',')!=-1){
                 String[] imgList = si.getSiImg().split(",");
@@ -201,8 +202,21 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
             si.setSingularization(skillorderService.selectBySkillIdCount(si.getSiSerialnumber()));
             si.setMorningstarRating(5);
             log.info("技能用户：" + si);
+
+            if (skilltype1.getStFamilynumber().equals("jn0016")){
+                select1.add(si);
+            }else {
+                select2.add(si);
+            }
         }
-        PageInfo<Skillsinfo> page = new PageInfo<>(select);
-        return page;
+        PageInfo<Skillsinfo> pageInfo = null;
+        if(state == 1){
+            pageInfo = new PageInfo<Skillsinfo>(select1);
+            //return select1;
+        }else {
+            pageInfo = new PageInfo<Skillsinfo>(select2);
+            //return select2;
+        }
+        return pageInfo;
     }
 }

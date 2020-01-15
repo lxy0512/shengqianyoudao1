@@ -1,6 +1,7 @@
 package cn.qiandao.shengqianyoudao.service;
 
 import cn.qiandao.shengqianyoudao.pojo.*;
+import com.github.pagehelper.PageInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,6 @@ public interface UserInfoService {
     String invitationCode(String usernumber,String code);
     Breviary invitationCodeNull(String usernumber);
     String deleteUser(String usernumber);
-    List<Breviary> getAllUserInfo(String pagenum);
     User getuserinfo(String usernumber);
+    PageInfo<User> getAllUser(int pageNum, int pageSize);
 }

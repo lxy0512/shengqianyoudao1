@@ -14,11 +14,20 @@ import java.util.List;
  * @data
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/post")
 public class PostController {
 
     @Autowired
     private PostServiceImpl psi;
+
+    /**
+     * 后台查看所有帖子
+     */
+    @RequestMapping("/get/{pagenum}")
+    public List<Post> getAllPost(@PathVariable("pagenum") String pagenum){
+        return psi.getAllPost(pagenum);
+    }
 
     /**
      * 获取某个类型的全部帖子

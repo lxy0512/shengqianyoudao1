@@ -77,4 +77,9 @@ public class PostServiceImpl implements PostService {
         return "发布失败";
     }
 
+    public List<Post> getAllPost(String pagenum){
+        int page = (Integer.valueOf(pagenum) -1 )*5;
+        return pm.getAllPost(page);
+    }
+
 }

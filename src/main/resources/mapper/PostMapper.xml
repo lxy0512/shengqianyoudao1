@@ -9,6 +9,7 @@
         <result column="ui_name" jdbcType="VARCHAR" property="username"/>
         <result column="pi_title" jdbcType="VARCHAR" property="title"/>
         <result column="st_content" jdbcType="VARCHAR" property="type"/>
+        <result column="pi_state" jdbcType="INTEGER" property="state"/>
         <result column="pi_content" jdbcType="VARCHAR" property="content"/>
         <result column="pi_img" jdbcType="VARCHAR" property="images"/>
         <result column="pi_date" jdbcType="DATE" property="date"/>
@@ -47,5 +48,8 @@
     </select>
     <select id="gethotpost" resultMap="postMap">
         select ui_name,pi_number,pi_title,st_content,pi_content,pi_date,pi_replies from postinfo,skilltype,userinfo where ui_number=pi_usernumber and st_number=pi_type and pi_state=1 order by pi_replies desc
+    </select>
+    <select id="getAllPost" resultType="cn.qiandao.shengqianyoudao.pojo.Post" resultMap="postMap">
+        select ui_name,pi_number,pi_title,st_content,pi_content,pi_date,pi_replies,pi_state from postinfo,skilltype,userinfo where ui_number=pi_usernumber and st_number=pi_type limit #{page},5
     </select>
 </mapper>

@@ -10,6 +10,42 @@
         <result column="ui_img" jdbcType="VARCHAR" property="images"/>
         <result column="ui_code" jdbcType="VARCHAR" property="code"/>
     </resultMap>
+    <resultMap id="UserMap" type="cn.qiandao.shengqianyoudao.pojo.User">
+        <!--@mbg.generated-->
+        <!--@Table userinfo-->
+        <result column="ui_number" jdbcType="VARCHAR" property="number" />
+        <result column="ui_name" jdbcType="VARCHAR" property="username" />
+        <result column="ui_pwd" jdbcType="VARCHAR" property="pwd" />
+        <result column="ui_img" jdbcType="VARCHAR" property="img" />
+        <result column="ui_bgimg" jdbcType="VARCHAR" property="bgimg" />
+        <result column="ui_phone" jdbcType="VARCHAR" property="phone" />
+        <result column="ui_grade" jdbcType="INTEGER" property="grade" />
+        <result column="ui_state" jdbcType="INTEGER" property="state" />
+        <result column="ui_code" jdbcType="VARCHAR" property="invitationcode" />
+        <result column="ui_signature" jdbcType="VARCHAR" property="signature" />
+        <result column="ui_registrationdate" jdbcType="DATE" property="registrationdate" />
+        <result column="ui_cashbalance" jdbcType="DECIMAL" property="cashbalance" />
+        <result column="ui_virtualcurrencybalance" jdbcType="DECIMAL" property="vcbalance" />
+        <result column="ui_exp" jdbcType="INTEGER" property="exp" />
+        <result column="ubi_name" jdbcType="VARCHAR" property="name" />
+        <result column="ubi_familyname" jdbcType="VARCHAR" property="familyname" />
+        <result column="ubi_language" jdbcType="INTEGER" property="language" />
+        <result column="ubi_gender" jdbcType="INTEGER" property="gender" />
+        <result column="ubi_birth" jdbcType="DATE" property="birth" />
+        <result column="ubi_area" jdbcType="INTEGER" property="area" />
+        <result column="ubi_documenttype" jdbcType="INTEGER" property="documenttype" />
+        <result column="ubi_documentnumber" jdbcType="LONGVARCHAR" property="documentnumber" />
+        <result column="ubi_educationbackground" jdbcType="INTEGER" property="educationbackground" />
+        <result column="ubi_educationexperience" jdbcType="VARCHAR" property="educationexperience" />
+        <result column="ubi_industry" jdbcType="INTEGER" property="industry" />
+        <result column="ubi_workingexperience" jdbcType="VARCHAR" property="workingexperience" />
+        <result column="ubi_incomerange" jdbcType="INTEGER" property="incomerange" />
+        <result column="ubi_email" jdbcType="VARCHAR" property="email" />
+        <result column="ubi_wechat" jdbcType="VARCHAR" property="wechat" />
+        <result column="ro_name" jdbcType="VARCHAR" property="role"/>
+        <result column="rp_permissionnumber" jdbcType="VARCHAR" property="permissions"/>
+        <result column="ui_creditscore" jdbcType="INTEGER" property="creditscore"/>
+    </resultMap>
     <update id="changeUserInfo">
         update userinfo set
         <trim suffix=",">
@@ -105,6 +141,14 @@
     </update>
     <select id="getAllUserInfo" resultType="cn.qiandao.shengqianyoudao.pojo.Breviary" resultMap="attMap">
         select ui_number,ui_name,ui_img from userinfo
+    </select>
+    <select id="getUserInfo" resultType="cn.qiandao.shengqianyoudao.pojo.User" resultMap="UserMap">
+        select ui_number,ui_name,ui_pwd,ui_img,ui_bgimg,ui_phone,ui_grade,ui_state,ui_code,ui_signature,ui_registrationdate,ui_cashbalance,
+        ui_virtualcurrencybalance,ubi_name,ubi_familyname,ubi_language,ubi_gender,ubi_birth,ubi_area,ubi_documenttype,
+        ubi_documentnumber,ubi_educationbackground,ubi_educationexperience,ubi_industry,ubi_workingexperience,ubi_incomerange,ubi_email,
+        ubi_wechat,ro_name,rp_permissionnumber,ui_creditscore
+        from userinfo,userbasicinfo,userrole,role,rolepermission
+        where ui_number=#{usernumber} and ui_number=ubi_usernumber and ubi_usernumber=ur_usernumber and ur_rolenumber=ro_number and rp_rolenumber=ro_number and ui_state=1
     </select>
 
 

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description
@@ -100,6 +101,14 @@ public class UserInfoServiceImpl implements UserInfoService {
             return "删除成功";
         }
         return "删除失败";
+    }
+
+    public User getuserinfo(String usernumber){
+        return uim.getUserInfo(usernumber);
+    }
+
+    public List<Breviary> getAllUserInfo(){
+        return uim.getAllUserInfo();
     }
 
 }

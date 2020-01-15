@@ -107,8 +107,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         return uim.getUserInfo(usernumber);
     }
 
-    public List<Breviary> getAllUserInfo(){
-        return uim.getAllUserInfo();
+    public List<Breviary> getAllUserInfo(String pagenum){
+        int page = (Integer.valueOf(pagenum) -1)*5;
+        return uim.getAllUserInfo(page);
     }
 
 }

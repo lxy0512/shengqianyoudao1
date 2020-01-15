@@ -140,7 +140,7 @@
         update userinfo set ui_state=0 where ui_number=#{usernumber}
     </update>
     <select id="getAllUserInfo" resultType="cn.qiandao.shengqianyoudao.pojo.Breviary" resultMap="attMap">
-        select ui_number,ui_name,ui_img from userinfo
+        select ui_number,ui_name,ui_img from userinfo limit #{page},5
     </select>
     <select id="getUserInfo" resultType="cn.qiandao.shengqianyoudao.pojo.User" resultMap="UserMap">
         select ui_number,ui_name,ui_pwd,ui_img,ui_bgimg,ui_phone,ui_grade,ui_state,ui_code,ui_signature,ui_registrationdate,ui_cashbalance,

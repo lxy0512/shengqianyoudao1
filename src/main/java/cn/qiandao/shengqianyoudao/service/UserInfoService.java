@@ -17,6 +17,6 @@ public interface UserInfoService {
     String invitationCode(String usernumber,String code);
     Breviary invitationCodeNull(String usernumber);
     String deleteUser(String usernumber);
-    List<Breviary> getAllUserInfo();
+    List<Breviary> getAllUserInfo(String pagenum);
     User getuserinfo(String usernumber);
 }

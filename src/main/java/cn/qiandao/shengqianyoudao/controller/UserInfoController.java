@@ -72,16 +72,16 @@ public class UserInfoController {
     /**
      * 后台查看用户列表
      */
-    @RequestMapping("/getinfo")
+    @RequestMapping("/getinfo/{pagenum}")
     @ResponseBody
-    public List<Breviary> getAllUserInfo() {
-        return usi.getAllUserInfo();
+    public List<Breviary> getAllUserInfo(@PathVariable("pagenum")String pagenum) {
+        return usi.getAllUserInfo(pagenum);
     }
 
     /**
      * 查看用户信息
      */
-    @RequestMapping("/getinfo/{usernumber}")
+    @RequestMapping("/getinfolist/{usernumber}")
     @ResponseBody
     public User getUserInfo(@PathVariable("usernumber")String usernumber){
         return usi.getuserinfo(usernumber);

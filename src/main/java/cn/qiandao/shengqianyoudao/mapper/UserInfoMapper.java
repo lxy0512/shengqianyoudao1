@@ -26,6 +26,6 @@ public interface UserInfoMapper {
     int saveICode(@Param("usernumber")String usernumber,@Param("code")String code,@Param("date")Date date);
     int repeatICode(@Param("usernumber")String usernumber,@Param("code")String code);
     int deleteUser(String usernumber);
-    List<Breviary> getAllUserInfo();
+    List<Breviary> getAllUserInfo(int page);
     User getUserInfo(@Param("usernumber")String usernumber);
 }

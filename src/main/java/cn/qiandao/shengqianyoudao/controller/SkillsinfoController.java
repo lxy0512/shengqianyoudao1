@@ -107,9 +107,9 @@ public class SkillsinfoController {
         return skillsinfoService.getByUserId(userId);
     }
 
-    @GetMapping("/getAllSkills/{state}/{pageNum}/{pageSize}")
+    @GetMapping("/getAllSkills")
     @ApiOperation(value = "分页查询所有任务",notes = "分页查询所有任务")
-    public PageInfo<Skillsinfo> getAllSkills(@PathVariable("state") int state, @PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize){
+    public PageInfo<Skillsinfo> getAllSkills(@RequestParam int state,@RequestParam int pageNum,@RequestParam int pageSize){
         return skillsinfoService.getAllSkills(state,pageNum,pageSize);
     }
 

@@ -87,9 +87,9 @@ public class TaskinfoController {
         return taskinfoService.updateTask(taskid,state);
     }
 
-    @PutMapping("/getAllTask/{state}/{pageNum}/{pageSize}")
+    @GetMapping("/getAllTask")
     @ApiOperation(value = "分页查询所有任务",notes = "分页查询所有任务")
-    public PageInfo<Taskinfo> getAllTask(@PathVariable("state") int state,@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize){
+    public PageInfo<Taskinfo> getAllTask(@RequestParam int state,@RequestParam int pageNum,@RequestParam  int pageSize){
         return taskinfoService.getAllTask(state,pageNum,pageSize);
     }
 }

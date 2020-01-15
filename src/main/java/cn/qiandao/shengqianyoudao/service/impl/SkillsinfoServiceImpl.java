@@ -5,7 +5,6 @@ import cn.qiandao.shengqianyoudao.mapper.SkillsinfoMapper;
 import cn.qiandao.shengqianyoudao.pojo.Skillsinfo;
 import cn.qiandao.shengqianyoudao.pojo.Skilltype;
 import cn.qiandao.shengqianyoudao.pojo.Skilluserrelationship;
-import cn.qiandao.shengqianyoudao.pojo.Taskinfo;
 import cn.qiandao.shengqianyoudao.service.SkillorderService;
 import cn.qiandao.shengqianyoudao.service.SkillsinfoService;
 import cn.qiandao.shengqianyoudao.service.SkilltypeService;
@@ -60,7 +59,9 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
             }
             Skilluserrelationship user = getUser(siSerialnumber);
             log.info(user.getSurUsernumber());
-            s.setU(userService.findById(user.getSurUsernumber()));
+            if (user != null){
+                s.setU(userService.findById(user.getSurUsernumber()));
+            }
             s.setSingularization(skillorderService.selectBySkillIdCount(siSerialnumber));
             s.setMorningstarRating(5);
             //redisTemplate.opsForValue().set(siSerialnumber,s);
@@ -182,11 +183,25 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
     public PageInfo<Skillsinfo> getAllSkills(int state, int pageNum, int pageSize) {
         //设置分页器
         PageHelper.startPage(pageNum,pageSize);
-
         Skillsinfo skillsinfo = new Skillsinfo();
         skillsinfo.setSiState(state);
         List<Skillsinfo> select = skillsinfoMapper.select(skillsinfo);
-
+        List<Skillsinfo> select1 = null;
+        for (Skillsinfo si : select) {
+            si.setSiType(getSiiType(si.getSiType()));
+            if (si.getSiImg().indexOf(',')!=-1){
+                String[] imgList = si.getSiImg().split(",");
+                si.setSiImgages(imgList);
+                si.setSiImg(imgList[0]);
+            }
+            Skilluserrelationship user = getUser(si.getSiSerialnumber());
+            if (user != null){
+                si.setU(userService.findById(user.getSurUsernumber()));
+            }
+            si.setSingularization(skillorderService.selectBySkillIdCount(si.getSiSerialnumber()));
+            si.setMorningstarRating(5);
+            log.info("技能用户：" + si);
+        }
         PageInfo<Skillsinfo> page = new PageInfo<>(select);
         return page;
     }

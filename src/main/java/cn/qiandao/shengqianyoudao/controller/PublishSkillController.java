@@ -153,6 +153,7 @@ public class PublishSkillController {
 
     @RequestMapping("/pubPost")
     public String pubPost(@RequestBody Map postMap){
+        System.out.println(postMap+"1111111111111111111111");
         System.out.println("已进入发布帖子");
         /**
          * piUsernumber piTitle piType piContent piImg

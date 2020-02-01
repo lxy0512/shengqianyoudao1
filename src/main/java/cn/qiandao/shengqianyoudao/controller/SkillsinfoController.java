@@ -36,31 +36,30 @@ public class SkillsinfoController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/selAll")
+    @GetMapping("/selAll/{state}")
     @ApiOperation(value = "查询所有技能信息", notes = "查询技能信息")
-    public List<Skillsinfo> selectAll(){
-        return skillsinfoService.selectAll();
+    public List<Skillsinfo> selectAll(@PathVariable("state")int state){
+        return skillsinfoService.selectAll(state);
     }
 
     @GetMapping("/sel/{skillId}")
     @ApiOperation(value = "技能详情页信息", notes = "技能详情页信息")
-    public ResponseEntity<Map<String,Object>> getSkillOrder(@PathVariable("skillId") String skillId){
-        if (StringUtils.isEmpty(skillId)){
-            return ResponseEntity.badRequest().build();
-        }
+    public Map<String,Object> getSkillOrder(@PathVariable("skillId") String skillId){
+
         Map<String,Object> map = new HashMap<String, Object>();
         try {
             Skillsinfo skillsinfo = skillsinfoService.selectBySiSerialnumber(skillId);
+            System.out.println(skillsinfo);
             List<Skillcomment> skillcomments = skillcommentService.selSkillcomment(skillId);
             Skilluserrelationship user = skillsinfoService.getUser(skillId);
             Userinfo users = userService.findById(user.getSurUsernumber());
-            if (users == null){
-                return ResponseEntity.notFound().build();
-            }
+            /*if (users == null){
+                return null;
+            }*/
             map.put("skillsinfo",skillsinfo);
             map.put("skillcomments",skillcomments);
             map.put("users",users);
-            return ResponseEntity.ok(map);
+            return map;
         }catch (Exception e){
             throw new RuntimeException("参数错误");
         }
@@ -69,7 +68,9 @@ public class SkillsinfoController {
     @GetMapping("/selOne/{skillId}")
     @ApiOperation(value = "技能详情加用户信息", notes = "技能详情页信息")
     public Skillsinfo getBySkills(String siSerialnumber){
-        return skillsinfoService.selectBySiSerialnumber(siSerialnumber);
+        Skillsinfo skillsinfo = skillsinfoService.selectBySiSerialnumber(siSerialnumber);
+        System.out.println(skillsinfo);
+        return skillsinfo;
     }
 
     @GetMapping("/seluid/{skillId}")

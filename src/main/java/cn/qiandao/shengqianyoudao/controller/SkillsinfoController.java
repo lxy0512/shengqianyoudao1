@@ -3,6 +3,7 @@ package cn.qiandao.shengqianyoudao.controller;
 import cn.qiandao.shengqianyoudao.pojo.*;
 import cn.qiandao.shengqianyoudao.service.SkillcommentService;
 import cn.qiandao.shengqianyoudao.service.SkillsinfoService;
+import cn.qiandao.shengqianyoudao.service.UserInfoService;
 import cn.qiandao.shengqianyoudao.service.UserService;
 import cn.qiandao.shengqianyoudao.util.IDUtil;
 import com.alipay.api.domain.Person;
@@ -10,6 +11,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,6 +26,7 @@ import java.util.Map;
  * @author lxy
  * @date 2020/1/3 0003 23:13
  **/
+@Slf4j
 @RestController
 @CrossOrigin
 @RequestMapping("/skills")
@@ -34,7 +37,7 @@ public class SkillsinfoController {
     @Autowired
     private SkillcommentService skillcommentService;
     @Autowired
-    private UserService userService;
+    private UserInfoService userService;
 
     @GetMapping("/selAll/{state}")
     @ApiOperation(value = "查询所有技能信息", notes = "查询技能信息")
@@ -51,8 +54,7 @@ public class SkillsinfoController {
             Skillsinfo skillsinfo = skillsinfoService.selectBySiSerialnumber(skillId);
             System.out.println(skillsinfo);
             List<Skillcomment> skillcomments = skillcommentService.selSkillcomment(skillId);
-            Skilluserrelationship user = skillsinfoService.getUser(skillId);
-            Userinfo users = userService.findById(user.getSurUsernumber());
+            User users = skillsinfo.getU();
             /*if (users == null){
                 return null;
             }*/
@@ -81,8 +83,8 @@ public class SkillsinfoController {
 
     @GetMapping("/seluser/{uid}")
     @ApiOperation(value = "用户详情", notes = "用户详情")
-    public Userinfo selectUser(@PathVariable("uid") String uid){
-        return userService.findById(uid);
+    public User selectUser(@PathVariable("uid") String uid){
+        return userService.getuserinfo(uid);
     }
 
     @PutMapping("/update")

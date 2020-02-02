@@ -5,10 +5,7 @@ import cn.qiandao.shengqianyoudao.mapper.SkillsinfoMapper;
 import cn.qiandao.shengqianyoudao.pojo.Skillsinfo;
 import cn.qiandao.shengqianyoudao.pojo.Skilltype;
 import cn.qiandao.shengqianyoudao.pojo.Skilluserrelationship;
-import cn.qiandao.shengqianyoudao.service.SkillorderService;
-import cn.qiandao.shengqianyoudao.service.SkillsinfoService;
-import cn.qiandao.shengqianyoudao.service.SkilltypeService;
-import cn.qiandao.shengqianyoudao.service.UserService;
+import cn.qiandao.shengqianyoudao.service.*;
 import cn.qiandao.shengqianyoudao.util.IDUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -38,7 +35,7 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
     @Autowired
     private SkillRelationMapper skillRelationMapper;
     @Autowired
-    private UserService userService;
+    private UserInfoService userService;
     @Autowired
     private SkillorderService skillorderService;
     @Autowired
@@ -61,7 +58,7 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
         Skilluserrelationship user = getUser(siSerialnumber);
         log.info(user.getSurUsernumber());
         if (user != null){
-            s.setU(userService.findById(user.getSurUsernumber()));
+            s.setU(userService.getuserinfo(user.getSurUsernumber()));
         }
         s.setSingularization(skillorderService.selectBySkillIdCount(siSerialnumber));
         s.setMorningstarRating(5);
@@ -81,7 +78,7 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
             si.setSiImg(si.getSiImg().split(",")[0]);
             Skilluserrelationship user = getUser(si.getSiSerialnumber());
             if (user != null){
-                si.setU(userService.findById(user.getSurUsernumber()));
+                si.setU(userService.getuserinfo(user.getSurUsernumber()));
             }
         }
         return skillsinfos;
@@ -207,7 +204,7 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
             }
             Skilluserrelationship user = getUser(si.getSiSerialnumber());
             if (user != null){
-                si.setU(userService.findById(user.getSurUsernumber()));
+                si.setU(userService.getuserinfo(user.getSurUsernumber()));
             }
             si.setSingularization(skillorderService.selectBySkillIdCount(si.getSiSerialnumber()));
             si.setMorningstarRating(5);

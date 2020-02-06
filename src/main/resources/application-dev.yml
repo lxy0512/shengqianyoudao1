@@ -41,11 +41,9 @@ logging:
 # redis
 spring:
   redis:
-    #host : 47.94.44.143
-    host : localhost
+    host : 47.94.44.143
     port : 6379
-    password:
-    #123456
+    password: 123456
     timeout:
     jedis :
       pool :

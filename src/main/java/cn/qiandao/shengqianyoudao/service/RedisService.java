@@ -1,5 +1,9 @@
 package cn.qiandao.shengqianyoudao.service;
 
+import cn.qiandao.shengqianyoudao.pojo.Collectionrecords;
+
+import java.util.List;
+
 /**
  * redis服务接口
  *
@@ -23,5 +27,4 @@ public interface RedisService {
      * @param skillsId 技能ID
      */
     void unlikeArticle(String skillsId, String userId);
-
 }

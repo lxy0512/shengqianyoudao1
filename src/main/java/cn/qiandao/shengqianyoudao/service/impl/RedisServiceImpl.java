@@ -2,7 +2,9 @@ package cn.qiandao.shengqianyoudao.service.impl;
 
 import cn.qiandao.shengqianyoudao.enums.ErrorCodeEnum;
 import cn.qiandao.shengqianyoudao.exception.CustomException;
+import cn.qiandao.shengqianyoudao.pojo.Collectionrecords;
 import cn.qiandao.shengqianyoudao.pojo.Skilluserrelationship;
+import cn.qiandao.shengqianyoudao.service.CollectionrecordsService;
 import cn.qiandao.shengqianyoudao.service.ISkillRelationService;
 import cn.qiandao.shengqianyoudao.service.RedisService;
 import cn.qiandao.shengqianyoudao.util.FastjsonUtil;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -97,7 +100,7 @@ public class RedisServiceImpl implements RedisService {
 
             //用户喜欢的文章-1
             String userLikeResult = (String) redisTemplate.opsForHash().get(USER_LIKE_ARTICLE_KEY, String.valueOf(userId));
-            Set<Long> articleIdSet = FastjsonUtil.deserializeToSet(userLikeResult, Long.class);
+            Set<String> articleIdSet = FastjsonUtil.deserializeToSet(userLikeResult, String.class);
             articleIdSet.remove(skillsId);
             redisTemplate.opsForHash().put(USER_LIKE_ARTICLE_KEY, String.valueOf(userId), FastjsonUtil.serialize(articleIdSet));
         }

@@ -47,7 +47,7 @@ public class ScheduleTask {
     @Resource
     private RedisTemplate redisTemplate;
 
-    @Scheduled(cron = "0 0 0/1 * * ? ")
+    @Scheduled(cron = "0 0 */2 * * ? ")
     public void redisDataToMySQL() {
         log.info("time:{}，开始执行Redis数据持久化到MySQL任务", LocalDateTime.now().format(formatter));
         Map<String, String> userCountMap = redisTemplate.opsForHash().entries(USER_LIKE_ARTICLE_KEY);
@@ -69,7 +69,10 @@ public class ScheduleTask {
     private void synchronizeUserLikeArticle(String userId, Set<String> skillIdSet) {
         for (String skillId : skillIdSet) {
             Collectionrecords userLikeArticle = buildUserLikeArticle(skillId, userId);
-            if (userLikeArticleService.selectOne(userLikeArticle) == null) {
+            Collectionrecords collectionrecords = userLikeArticleService.selectOne(userLikeArticle);
+            log.info(collectionrecords + "");
+            if (null == userLikeArticleService.selectOne(userLikeArticle)) {
+                userLikeArticle.setCorDate(new Date());
                 userLikeArticleService.insert(userLikeArticle);
             }
         }
@@ -88,7 +91,6 @@ public class ScheduleTask {
         userLikeArticle.setCorUsernumber(userId);
         Skilluserrelationship skilluserrelationship = skillRelationService.selUser(skillId);
         userLikeArticle.setCorReleaseusernumber(skilluserrelationship.getSurUsernumber());
-        userLikeArticle.setCorDate(new Date());
         return userLikeArticle;
     }
 

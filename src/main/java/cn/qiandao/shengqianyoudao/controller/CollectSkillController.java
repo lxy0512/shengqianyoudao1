@@ -1,7 +1,7 @@
 package cn.qiandao.shengqianyoudao.controller;
 
-import cn.qiandao.shengqianyoudao.pojo.Skilluserrelationship;
-import cn.qiandao.shengqianyoudao.service.ISkillRelationService;
+import cn.qiandao.shengqianyoudao.pojo.Skillsinfo;
+import cn.qiandao.shengqianyoudao.service.CollectionrecordsService;
 import cn.qiandao.shengqianyoudao.service.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author lxy
@@ -25,7 +26,7 @@ import javax.annotation.Resource;
 public class CollectSkillController {
 
     @Autowired
-    private ISkillRelationService service;
+    private CollectionrecordsService collectionrecordsService;
     @Resource
     private RedisService redisService;
 
@@ -37,11 +38,11 @@ public class CollectSkillController {
             @ApiImplicitParam(name="skillsId",value="技能编号"),
             @ApiImplicitParam(name="userId",value="用户编号")
     })
-    @PostMapping("/{skillsId}/{userId}")
-    public Object likeArticle(@PathVariable("skillsId") String skillsId,
+    @GetMapping("/{skillsId}/{userId}")
+    public String likeSkills(@PathVariable("skillsId") String skillsId,
                               @PathVariable("userId") String uId) {
         redisService.likeArticle(skillsId, uId);
-        return skillsId;
+        return "收藏成功";
     }
 
     /**
@@ -53,9 +54,23 @@ public class CollectSkillController {
             @ApiImplicitParam(name="userId",value="用户编号")
     })
     @DeleteMapping("/{skillsId}/{userId}")
-    public Object unlikeArticle(@PathVariable("skillsId") String skillsId,
+    public String unlikeSkills(@PathVariable("skillsId") String skillsId,
                                 @PathVariable("userId") String userId) {
         redisService.unlikeArticle(skillsId, userId);
-        return skillsId;
+        return "取消收藏";
+    }
+
+    /**
+     * 查看收藏的技能
+     */
+    @ApiOperation(value="查看收藏的技能",notes="查看收藏的技能")
+    @ApiImplicitParam(name="userId",value="用户编号")
+    @GetMapping("/{userId}")
+    public Object selectlikeSkills(@PathVariable("userId") String userId) {
+        List<Skillsinfo> list = collectionrecordsService.selectAll(userId);
+        /*if (list == null){
+            return "空";
+        }*/
+        return list;
     }
 }

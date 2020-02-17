@@ -71,8 +71,8 @@ public class User implements Serializable {
     //姓氏
     private String familyname;
 
-    //语言，数据库为int
-    private Integer language;
+    //语言
+    private String language;
 
     //性别，数据库为int
     private Integer gender;

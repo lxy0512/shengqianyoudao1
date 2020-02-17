@@ -93,7 +93,7 @@ public class Skillsinfo implements Serializable {
     @Column(name = "si_grade")
     private Integer siGrade;
     @Transient
-    private Userinfo u;
+    private User u;
     @Transient
     /**
      *成单量

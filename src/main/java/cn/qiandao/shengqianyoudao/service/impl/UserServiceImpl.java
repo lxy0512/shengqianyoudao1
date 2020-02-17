@@ -5,6 +5,7 @@ import cn.qiandao.shengqianyoudao.pojo.Userinfo;
 import cn.qiandao.shengqianyoudao.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.rmi.runtime.Log;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
     public Userinfo findById(String id) {
         Userinfo u = new Userinfo();
         u.setNumber(id);
+
         return userMapper.selectOne(u);
         //return userMapper.selectByPrimaryKey(id);
     }

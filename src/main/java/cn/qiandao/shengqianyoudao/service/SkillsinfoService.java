@@ -23,7 +23,7 @@ public interface SkillsinfoService {
      * 查询查询所有的技能信息
      * @return
      */
-    List<Skillsinfo> selectAll();
+    List<Skillsinfo> selectAll(int state);
 
     /**
      * 根据技能类型编号返回技能类型标题
@@ -37,7 +37,7 @@ public interface SkillsinfoService {
      * @param skillsinfo
      * @return
      */
-    int addSkills(Skillsinfo skillsinfo);
+    int addSkills(Skillsinfo skillsinfo, String name);
 
     /**
      * 根据技能编号查用户编号

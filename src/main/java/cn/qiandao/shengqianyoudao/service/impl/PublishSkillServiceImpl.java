@@ -264,6 +264,7 @@ public class PublishSkillServiceImpl implements PublishSkillService {
     public String pubPost(Map postInfo) {
         boolean piTitle = checkSensitiveWords.checkWorks(postInfo.get("piTitle").toString());
         boolean piContent = checkSensitiveWords.checkWorks(postInfo.get("piContent").toString());
+        System.out.println(postInfo.get("piType")+"=================");
         String piType = getSkillId(postInfo.get("piType").toString());
         System.out.println(piType+"*****************************");
         String piType1 = getSkillId(postInfo.get("piType").toString());

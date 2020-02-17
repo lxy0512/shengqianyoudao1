@@ -79,51 +79,28 @@ public class VirtualServiceImpl implements VirtualService {
                 log.info("用户：" + o);
                 redisTemplate.opsForValue().set("用户" + uid,o);
             }
-            /*if (o == null) {
-                return "用户不存在";
-            }*/
             double vcrGatheringbalance = o.getVcbalance().doubleValue();
             double vcrVcbalance = o.getCashbalance().doubleValue();
             log.info(String.valueOf(vcrGatheringbalance));
             if (vcrGatheringbalance < total) {
                 return "金额超出范围";
             }
-            ExecutorService executor = Executors.newFixedThreadPool(2);
-            Future<Integer> future1 = executor.submit(() -> {
-                System.out.println("task is executed");
-                Virtualcurrencyrecords vcc = new Virtualcurrencyrecords();
-                vcc.setVcrChange(BigDecimal.valueOf(vc));
-                vcc.setVcrChangetype(0);
-                vcc.setVcrTime(new Date());
-                vcc.setVcrCause(5);
-                vcc.setVcrUserserialnumber(uid);
-                vcc.setVcrGatheringbalance(BigDecimal.valueOf(vcrGatheringbalance - vc));
-                int i = addVirtualcords(vcc);
-                return i;
-            });
-            /*if (future1.get() == 1) {
-                log.info("金币插入成功");
-            } else {
-                log.info("金币插入失败");
-            }*/
-            Future<Integer> future2 = executor.submit(() -> {
-                System.out.println("task is executed");
-                Cashrecords cashrecords = new Cashrecords();
-                cashrecords.setCrChange(BigDecimal.valueOf(total));
-                cashrecords.setCrChangetype(1);
-                cashrecords.setCrDate(new Date());
-                cashrecords.setCrCause("1");
-                cashrecords.setCrGatheringusernumber(uid);
-                cashrecords.setCrGatheringbalance(BigDecimal.valueOf(vcrVcbalance-total));
-                int i = cashrecordsService.addCashrecords(cashrecords);
-                return i;
-            });
-            /*if (future2.get() == 1) {
-                log.info("现金插入成功");
-            } else {
-                log.info("现金插入失败");
-            }*/
-
+            Virtualcurrencyrecords vcc = new Virtualcurrencyrecords();
+            vcc.setVcrChange(BigDecimal.valueOf(vc));
+            vcc.setVcrChangetype(0);
+            vcc.setVcrTime(new Date());
+            vcc.setVcrCause(5);
+            vcc.setVcrUserserialnumber(uid);
+            vcc.setVcrGatheringbalance(BigDecimal.valueOf(vcrGatheringbalance - vc));
+            int i1 = addVirtualcords(vcc);
+            Cashrecords cashrecords = new Cashrecords();
+            cashrecords.setCrChange(BigDecimal.valueOf(total));
+            cashrecords.setCrChangetype(1);
+            cashrecords.setCrDate(new Date());
+            cashrecords.setCrCause("1");
+            cashrecords.setCrGatheringusernumber(uid);
+            cashrecords.setCrGatheringbalance(BigDecimal.valueOf(vcrVcbalance-total));
+            int i2 = cashrecordsService.addCashrecords(cashrecords);
             JSONObject jo = new JSONObject();
             jo.put("cash", o.getCashbalance().doubleValue()-total);
             jo.put("gold", o.getVcbalance().doubleValue()-vc);

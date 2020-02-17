@@ -5,10 +5,7 @@ import cn.qiandao.shengqianyoudao.mapper.SkillsinfoMapper;
 import cn.qiandao.shengqianyoudao.pojo.Skillsinfo;
 import cn.qiandao.shengqianyoudao.pojo.Skilltype;
 import cn.qiandao.shengqianyoudao.pojo.Skilluserrelationship;
-import cn.qiandao.shengqianyoudao.service.SkillorderService;
-import cn.qiandao.shengqianyoudao.service.SkillsinfoService;
-import cn.qiandao.shengqianyoudao.service.SkilltypeService;
-import cn.qiandao.shengqianyoudao.service.UserService;
+import cn.qiandao.shengqianyoudao.service.*;
 import cn.qiandao.shengqianyoudao.util.IDUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -19,7 +16,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,52 +35,51 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
     @Autowired
     private SkillRelationMapper skillRelationMapper;
     @Autowired
-    private UserService userService;
+    private UserInfoService userService;
     @Autowired
     private SkillorderService skillorderService;
     @Autowired
     private StringRedisTemplate redisTemplate;
     @Override
-    @Transactional
+    //@Transactional
     public Skillsinfo selectBySiSerialnumber(String siSerialnumber){
-        Skillsinfo s = null;
-        //(Skillsinfo) redisTemplate.opsForValue().get(siSerialnumber);
-        if (s == null){
-            s = new Skillsinfo();
-            s.setSiSerialnumber(siSerialnumber);
-            s = skillsinfoMapper.selectOne(s);
-            log.info("技能：" + s);
+        Skillsinfo s = new Skillsinfo();
+        s.setSiSerialnumber(siSerialnumber);
+        s = skillsinfoMapper.selectOne(s);
+        log.info("技能：" + s);
+        if (s != null){
             s.setSiType(getSiiType(s.getSiType()));
-            if (s.getSiImg().indexOf(',')!=-1){
-                String[] imgList = s.getSiImg().split(",");
-                s.setSiImgages(imgList);
-                s.setSiImg(imgList[0]);
-            }
-            Skilluserrelationship user = getUser(siSerialnumber);
-            log.info(user.getSurUsernumber());
-            if (user != null){
-                s.setU(userService.findById(user.getSurUsernumber()));
-            }
-            s.setSingularization(skillorderService.selectBySkillIdCount(siSerialnumber));
-            s.setMorningstarRating(5);
-            //redisTemplate.opsForValue().set(siSerialnumber,s);
         }
+        if (s.getSiImg().indexOf(',')!=-1){
+            String[] imgList = s.getSiImg().split(",");
+            s.setSiImgages(imgList);
+            s.setSiImg(imgList[0]);
+        }
+        Skilluserrelationship user = getUser(siSerialnumber);
+        log.info(user.getSurUsernumber());
+        if (user != null){
+            s.setU(userService.getuserinfo(user.getSurUsernumber()));
+        }
+        s.setSingularization(skillorderService.selectBySkillIdCount(siSerialnumber));
+        s.setMorningstarRating(5);
         log.info("修改技能：" + s);
         return s;
     }
 
     @Override
-    public List<Skillsinfo> selectAll() {
-        List<Skillsinfo> skillsinfos = skillsinfoMapper.selectAll();
+    public List<Skillsinfo> selectAll(int state) {
+        Skillsinfo skillsinfo = new Skillsinfo();
+        skillsinfo.setSiState(state);
+        List<Skillsinfo> skillsinfos = skillsinfoMapper.select(skillsinfo);
+        if (skillsinfos == null){
+            return null;
+        }
         for (Skillsinfo si : skillsinfos) {
             si.setSiImg(si.getSiImg().split(",")[0]);
-            //Skillsinfo newSkills = new Skillsinfo();
-            //newSkills = (Skillsinfo) redisTemplate.opsForValue().get(si.getSiSerialnumber());
-            //if (newSkills == null){
             Skilluserrelationship user = getUser(si.getSiSerialnumber());
-            si.setU(userService.findById(user.getSurUsernumber()));
-            //redisTemplate.opsForValue().set(si.getSiSerialnumber(),newSkills);
-            //}
+            if (user != null){
+                si.setU(userService.getuserinfo(user.getSurUsernumber()));
+            }
         }
         return skillsinfos;
     }
@@ -89,20 +87,29 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
     @Override
     public String getSiiType(String skillId){
         Skilltype skilltype1 = skilltypeService.selByStNumber(skillId);
+        if (skilltype1 == null){
+            return skilltype1.getStContent();
+        }
         Skilltype skilltype2 = skilltypeService.selByStNumber(skilltype1.getStFamilynumber());
         String type = skilltype2.getStContent() + "-" + skilltype1.getStContent();
         return type;
     }
 
     @Override
-    public int addSkills(Skillsinfo skillsinfo) {
+    public int addSkills(Skillsinfo skillsinfo, String name) {
         String skid = (String) redisTemplate.opsForValue().get("技能");
         log.info("旧值是" + skid);
         String jb = IDUtil.getNewEquipmentNo("jx", skid);
         log.info("新值是" + skid);
         redisTemplate.opsForValue().set("技能",jb);
         skillsinfo.setSiSerialnumber(jb);
-        return skillsinfoMapper.insert(skillsinfo);
+        int result = skillsinfoMapper.insert(skillsinfo);
+        Skilluserrelationship s = new Skilluserrelationship();
+        s.setSurUsernumber(name);
+        s.setSurSkillnumber(jb);
+        s.setSurDate(new Date());
+        skillRelationMapper.insert(s);
+        return result;
     }
 
     @Override
@@ -197,7 +204,7 @@ public class SkillsinfoServiceImpl implements SkillsinfoService {
             }
             Skilluserrelationship user = getUser(si.getSiSerialnumber());
             if (user != null){
-                si.setU(userService.findById(user.getSurUsernumber()));
+                si.setU(userService.getuserinfo(user.getSurUsernumber()));
             }
             si.setSingularization(skillorderService.selectBySkillIdCount(si.getSiSerialnumber()));
             si.setMorningstarRating(5);

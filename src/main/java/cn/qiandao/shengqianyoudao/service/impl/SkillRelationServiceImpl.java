@@ -41,4 +41,11 @@ public class SkillRelationServiceImpl implements ISkillRelationService {
         System.out.println(insert+"----");
         return 0;
     }
+
+    @Override
+    public Skilluserrelationship selUser(String skillsId) {
+        Skilluserrelationship skilluserrelationship = new Skilluserrelationship();
+        skilluserrelationship.setSurSkillnumber(skillsId);
+        return skillRelationMapper.selectOne(skilluserrelationship);
+    }
 }
